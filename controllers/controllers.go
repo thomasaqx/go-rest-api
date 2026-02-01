@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/thomasaqx/go-rest-api/database"
 	"github.com/thomasaqx/go-rest-api/models"
 )
 
@@ -19,7 +20,9 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 // AllPersonalities retorna todas as personalidades em formato JSON
 func AllPersonalities(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(models.Personalities)
+	var p []models.Personality
+	database.DB.Find(&p)
+	json.NewEncoder(w).Encode(p)
 
 }
 
