@@ -2,17 +2,18 @@ package database
 
 import (
 	"fmt"
+	"log"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-var(
-	DB *gorm.DB
-	Err error
+var (
+	DB  *gorm.DB
+	err error
 )
 
-func ConnectDB() (*gorm.DB, error) {
+func ConnectDB() {
 
 	fmt.Println("Connection to the postgresql database...")
 
@@ -20,10 +21,9 @@ func ConnectDB() (*gorm.DB, error) {
 	dsn := "host=localhost user=root password=root dbname=root port=5432 sslmode=disable"
 
 	//abrindo a conexao com o banco de dados usando funcao Open do gorm
-	DB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(postgres.Open(dsn))
 	if err != nil {
-		return nil, err
-	}
+		log.Panic("Erro ao conectar com banco de dados")
 
-	return DB, nil
+	}
 }

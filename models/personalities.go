@@ -1,13 +1,9 @@
 package models
 
 type Personality struct {
-	Id			string    `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	Id       int    `json:"id"`
+	Nome     string `json:"nome"`
+	Historia string `json:"historia"`
 }
 
 var Personalities []Personality
-
-func GetAllPersonalities() ([]Personality, error) {
-	return Personalities, nil
-}

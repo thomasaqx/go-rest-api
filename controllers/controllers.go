@@ -18,22 +18,50 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// AllPersonalities retorna todas as personalidades em formato JSON
+// AllPersonalities returns all personalities from the database json
 func AllPersonalities(w http.ResponseWriter, r *http.Request) {
-	var p []models.Personality
+	w.Header().Set("Content-Type", "application/json")
+	var p []models.Personality	
 	database.DB.Find(&p)
 	json.NewEncoder(w).Encode(p)
-
 }
 
+//get personality by id
 func GetPersonalityById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	for _, personality := range models.Personalities {
-		if personality.Id == id {
-			json.NewEncoder(w).Encode(personality)
-			return
-		}
-	}
+	var personality models.Personality
+
+	database.DB.First(&personality, id)
+	json.NewEncoder(w).Encode(personality)
+}
+
+//post new personality
+func CreatePersonality(w http.ResponseWriter, r *http.Request) {
+	var personality models.Personality
+	json.NewDecoder(r.Body).Decode(&personality)
+	database.DB.Create(&personality)
+	json.NewEncoder(w).Encode(personality)
+}
+
+//delete personality by id
+func DeletePersonality(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	var personality models.Personality
+	database.DB.Delete(&personality, id)
+	json.NewEncoder(w).Encode(personality)
+}
+
+func EditPersonality(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	
+	var personality models.Personality
+	database.DB.First(&personality, id)
+	json.NewDecoder(r.Body).Decode(&personality)
+	database.DB.Save(&personality)
+	json.NewEncoder(w).Encode(personality)
 }
